@@ -1,19 +1,28 @@
 import React from "react";
 import { Link } from "react-router-dom";
-// import defaultImage from "../../static/default.svg";
-// import * as db from "../firestore";
-// import Empty from "./shared/Empty";
-// import Error from "./shared/Error";
-// import Loading from "./shared/Loading";
+import defaultImage from "../../static/default.svg";
+import * as db from "../firestore";
+import Empty from "./shared/Empty";
+import Error from "./shared/Error";
+import useSWR from "swr"; // stale while revalidate
+import Loading from "./shared/Loading";
 
-function UserLists() {
+function UserLists({ user }) {
+  const { data: lists, error } = useSWR(user.uid, db.getUserLists);
+
+  if (error) return <Error message={error.message} />;
+  if (!lists) return <Loading />;
+  if (lists.length == 0) return <Empty />;
+
   return (
     <>
       {/* display user list count */}
       <section className="text-gray-500 bg-gray-900 body-font">
         <div className="container px-5 py-5 mx-auto">
           <div className="flex flex-wrap -m-4">
-            {/* display lists that user is part of  */}
+            {lists.map((list) => (
+              <ListItem key={list.id} list={list} />
+            ))}
           </div>
         </div>
       </section>

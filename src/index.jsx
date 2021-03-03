@@ -4,30 +4,26 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import ListPage from "./pages/ListPage";
 import HomePage from "./pages/HomePage";
 import SignIn from "./components/SignIn";
-import * as db from "./firestore";
+import Loading from "./components/shared/Loading";
+// import * as db from "./firestore";
+import useAuth from "./hooks/useAuth";
 
-// import useAuth from "./hooks/useAuth";
-// import Loading from "./components/shared/Loading";
+export const UserContext = React.createContext();
 
 function App() {
-  const [user, setUser] = React.useState(null);
-  const [loading, setLoading] = React.useState(true);
-
-  React.useEffect(() => {
-    db.checkAuth((user) => {
-      setLoading(false);
-      setUser(user);
-    });
-  }, []);
-  if (loading) return user ? <AuthApp /> : <UnAuthApp></UnAuthApp>;
+  const { user, loading } = useAuth();
+  if (loading) return <Loading />;
+  return user ? <AuthApp user={user} /> : <UnAuthApp />;
 }
 
-function AuthApp() {
+function AuthApp({ user }) {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path="/:listId" component={ListPage} />
-        <Route exact path="/" component={HomePage} />
+        <UserContext.Provider value={user}>
+          <Route path="/:listId" component={ListPage} />
+          <Route exact path="/" component={HomePage} />
+        </UserContext.Provider>
       </Switch>
     </BrowserRouter>
   );
