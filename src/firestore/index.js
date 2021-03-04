@@ -45,6 +45,44 @@ export async function getUserLists(userId) {
     .collection("lists")
     .where("author", "==", userId)
     .get();
-  const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-  return data;
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+}
+
+async function uploadCoverImage(file) {
+  const uploadTask = storage
+    .ref(`images/${file.name}-${file.lastModified}`)
+    .put(file);
+
+  return new Promise((resolve, reject) => {
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => console.log("Image uploading..", snapshot),
+      reject,
+      () => {
+        storage
+          .ref("images")
+          .child(`${file.name}-${file.lastModified}`)
+          .getDownloadURL()
+          .then(resolve);
+      }
+    );
+  });
+}
+
+export async function createList(list, user) {
+  const { name, description, image } = list;
+  await db.collection("lists").add({
+    name,
+    description,
+    image: image ? await uploadCoverImage(image) : null,
+    created: firebase.firestore.FieldValue.serverTimestamp(),
+    author: user.uid,
+    userIds: [user.uid],
+    users: [
+      {
+        id: user.uid,
+        name: user.displayName,
+      },
+    ],
+  });
 }
