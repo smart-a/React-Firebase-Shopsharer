@@ -86,3 +86,46 @@ export async function createList(list, user) {
     ],
   });
 }
+
+export async function getList(listId) {
+  try {
+    const list = await db.collection("lists").doc(listId).get();
+    if (!list) throw Error("List doesn't exist");
+    return list.data();
+  } catch (error) {
+    console.error(error);
+    throw Error(error);
+  }
+}
+
+export async function createListItem({ user, listId, item }) {
+  try {
+    const SHOT_KEY = "NZITZHAVGFKAO08SX1SADWGXDBCTCIYX";
+    const response = await fetch(
+      `https://screenshotapi.net/api/v1/screenshot?url=${item.link}$token=${SHOT_KEY}`
+    );
+    const { screenshot } = await response.json();
+    db.collection("lists")
+      .doc(listId)
+      .collection("items")
+      .add({
+        name: item.name,
+        link: item.link,
+        image: screenshot,
+        created: firebase.firestore.FieldValue.serverTimestamp(),
+        author: { id: user.uid, username: user.displayName },
+      });
+  } catch (error) {
+    console.error(error);
+    throw new Error(error);
+  }
+}
+
+export async function subscribeToListItem(listId, callback) {
+  return db
+    .collection("lists")
+    .doc(listId)
+    .collection("items")
+    .orderBy("created", "desc")
+    .onSnapshot(callback);
+}
