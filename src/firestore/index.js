@@ -129,3 +129,12 @@ export async function subscribeToListItem(listId, callback) {
     .orderBy("created", "desc")
     .onSnapshot(callback);
 }
+
+export function deleteListItem(listId, itemId) {
+  return db
+    .collection("lists")
+    .doc(listId)
+    .collection("items")
+    .doc(itemId)
+    .delete();
+}

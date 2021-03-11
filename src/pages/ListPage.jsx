@@ -18,6 +18,7 @@ function ListPage({ location }) {
 
   if (error) return <Error message={error.message} />;
   if (!list) return <Loading />;
+  const isNewUser = list.users.every();
 
   return (
     <Layout>
