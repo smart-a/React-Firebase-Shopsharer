@@ -102,10 +102,14 @@ export async function getList(listId) {
 export async function createListItem({ user, listId, item }) {
   try {
     const SHOT_KEY = "NZITZHAVGFKAO08SX1SADWGXDBCTCIYX";
+
     const response = await fetch(
-      `https://screenshotapi.net/api/v1/screenshot?url=${item.link}$token=${SHOT_KEY}`
+      `https://screenshotapi.net/api/v1/screenshot?url=${item.link}&token=${SHOT_KEY}`
     );
+    console.log(response);
     const { screenshot } = await response.json();
+    console.log(screenshot);
+
     db.collection("lists")
       .doc(listId)
       .collection("items")

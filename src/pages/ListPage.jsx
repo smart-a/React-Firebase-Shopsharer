@@ -21,7 +21,7 @@ function ListPage({ location }) {
 
   if (error) return <Error message={error.message} />;
   if (!list) return <Loading />;
-  console.log(list.users);
+
   const isNewUser = list.users.every((u) => u.id !== user.uid);
   if (isNewUser) {
     return <JoinList list={list} listId={listId} user={user} />;

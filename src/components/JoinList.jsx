@@ -3,7 +3,7 @@ import * as db from "../firestore";
 
 function JoinList({ list, listId, user }) {
   return (
-    <section className="text-gray-500 bg-gray-900 body-font">
+    <section className="text-gray-500 body-font">
       <div className="container px-5 py-24 mx-auto">
         <div className="flex items-center lg:w-3/5 mx-auto sm:flex-row flex-col">
           <div className="sm:w-32 sm:h-32 h-20 w-20 sm:mr-10 inline-flex items-center justify-center rounded-full text-orange-400 bg-gray-800 flex-shrink-0">
