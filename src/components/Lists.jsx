@@ -17,7 +17,7 @@ function UserLists({ user }) {
   return (
     <>
       <UserListCount count={lists.length} />
-      <section className="text-gray-500 bg-gray-900 body-font">
+      <section className="text-gray-500 body-font">
         <div className="container px-5 py-5 mx-auto">
           <div className="flex flex-wrap -m-4">
             {lists.map((list) => (

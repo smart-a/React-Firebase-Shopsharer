@@ -17,7 +17,7 @@ function ItemList({ listId }) {
   }, [listId]);
 
   return (
-    <section className="text-gray-500 body-font bg-gray-900">
+    <section className="text-gray-500 body-font ">
       <div className="container px-5 py-5 mx-auto">
         <div className="flex flex-wrap -m-4">
           {items.map((item) => (

@@ -26,10 +26,10 @@ function ListPage({ location }) {
   if (isNewUser) {
     return <JoinList list={list} listId={listId} user={user} />;
   }
-
+  // "bg-gray-900"
   return (
     <Layout>
-      <section className="text-gray-500 bg-gray-900 body-font">
+      <section className="text-gray-500 body-font">
         <div className="container mx-auto flex flex-col px-5 py-4 justify-center items-center">
           <div className="w-full md:w-2/3 flex flex-col mb-16 items-center text-center">
             <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium font-bold text-white">
